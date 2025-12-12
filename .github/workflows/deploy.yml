@@ -30,7 +30,7 @@ jobs:
         echo "FTP_USER: $FTP_USER"
         echo "FTP_SERVER: $FTP_SERVER"
         
-        # Try to check if the target directory exists on the server
+        # Check if the target directory exists on the server, create if it doesn't
         lftp -u $FTP_USER,$FTP_PASSWORD $FTP_SERVER -e "ls /giuaky_cuoiky || mkdir -p /giuaky_cuoiky; quit"
 
         # Mirror files to the server (replace existing files)
