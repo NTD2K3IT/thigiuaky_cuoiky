@@ -30,13 +30,13 @@ jobs:
         echo "FTP_USER: $FTP_USER"
         echo "FTP_SERVER: $FTP_SERVER"
         
-        # Try to check if the target directory exists on the server and create it if necessary
-        # Here we use a known writable directory, like `/ftp/` or `/var/www/`
-        lftp -u $FTP_USER,$FTP_PASSWORD $FTP_SERVER -e "ls /giuaky_cuoiky || mkdir -p /var/www/giuaky_cuoiky; quit"
+        # Kiểm tra nếu thư mục mục tiêu tồn tại trên server và tạo nếu cần thiết
+        # Dùng đường dẫn thư mục cụ thể của bạn
+        lftp -u $FTP_USER,$FTP_PASSWORD $FTP_SERVER -e "ls /www.NTDIT2K3.somee.com/giuaky_cuoiky || mkdir -p /www.NTDIT2K3.somee.com/giuaky_cuoiky; quit"
 
-        # Mirror files to the server (replace existing files)
+        # Đồng bộ các tệp tin từ local lên server (thay thế các tệp tin đã tồn tại)
         lftp -u $FTP_USER,$FTP_PASSWORD $FTP_SERVER <<EOF
-        mirror -R --ignore-time --parallel=5 --delete ./ /var/www/giuaky_cuoiky  # Use a known writable directory
+        mirror -R --ignore-time --parallel=5 --delete ./ /www.NTDIT2K3.somee.com/giuaky_cuoiky  # Sử dụng đường dẫn thư mục cụ thể
         quit
         EOF
       env:
