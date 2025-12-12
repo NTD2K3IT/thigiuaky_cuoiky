@@ -4,7 +4,7 @@ name: Deploy to Server
 on:
   push:
     branches:
-      - master  # Chỉ deploy khi có thay đổi ở nhánh main
+      - main  # Chỉ deploy khi có thay đổi ở nhánh main
 
 # Các bước thực hiện trong quá trình deploy
 jobs:
@@ -20,11 +20,21 @@ jobs:
     - name: Set up FTP client
       run: sudo apt-get install lftp  # Cài đặt công cụ lftp
 
-    # Bước 3: Deploy mã nguồn lên server qua FTP
+    # Bước 3: Kiểm tra xem thư mục local_dir có tồn tại không
+    - name: Check if local directory exists
+      run: |
+        if [ -d "./local_dir" ]; then
+          echo "local_dir exists"
+        else
+          echo "local_dir does not exist"
+          exit 1
+        fi
+
+    # Bước 4: Deploy mã nguồn lên server qua FTP
     - name: Deploy to server via FTP
       run: |
-       echo "FTP_USER: ${{ secrets.FTP_USER }}"
-       echo "FTP_SERVER: ${{ secrets.FTP_SERVER }}"
+        echo "FTP_USER: $FTP_USER"
+        echo "FTP_SERVER: $FTP_SERVER"
         lftp -u $FTP_USER,$FTP_PASSWORD $FTP_SERVER <<EOF
         mirror -R ./local_dir /remote_dir  # Sao chép mã nguồn từ local lên server
         quit
