@@ -18,7 +18,7 @@ jobs:
     - name: Set up FTP client
       run: sudo apt-get install -y lftp
 
-    # Step 3: Check if the local directory exists
+    # Step 3: Check if local directory exists
     - name: Check if local directory exists
       run: |
         pwd  # Print the current directory
@@ -30,11 +30,8 @@ jobs:
         echo "FTP_USER: $FTP_USER"
         echo "FTP_SERVER: $FTP_SERVER"
         
-        # Check if the target directory exists on the server
-        lftp -u $FTP_USER,$FTP_PASSWORD $FTP_SERVER -e "ls /giuaky_cuoiky; quit"
-        
-        # If the directory does not exist, create it
-        lftp -u $FTP_USER,$FTP_PASSWORD $FTP_SERVER -e "mkdir -p /giuaky_cuoiky; quit"
+        # Try to check if the target directory exists on the server
+        lftp -u $FTP_USER,$FTP_PASSWORD $FTP_SERVER -e "ls /giuaky_cuoiky || mkdir -p /giuaky_cuoiky; quit"
 
         # Mirror files to the server (replace existing files)
         lftp -u $FTP_USER,$FTP_PASSWORD $FTP_SERVER <<EOF
