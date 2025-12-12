@@ -36,9 +36,9 @@ jobs:
         # If the directory does not exist, create it
         lftp -u $FTP_USER,$FTP_PASSWORD $FTP_SERVER -e "mkdir -p /giuaky_cuoiky; quit"
 
-        # Mirror files to the server
+        # Mirror files to the server (replace existing files)
         lftp -u $FTP_USER,$FTP_PASSWORD $FTP_SERVER <<EOF
-        mirror -R --ignore-time --parallel=5 ./ /giuaky_cuoiky  # Copy files to the server
+        mirror -R --ignore-time --parallel=5 --delete ./ /giuaky_cuoiky  # Copy and delete outdated files on server
         quit
         EOF
       env:
