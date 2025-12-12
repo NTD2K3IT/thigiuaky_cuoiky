@@ -3,7 +3,7 @@ name: Deploy to Server
 on:
   push:
     branches:
-      - master  # Deploy on push to the 'main' branch
+      - master  # Deploy on push to the 'master' branch
 
 jobs:
   deploy:
@@ -30,12 +30,13 @@ jobs:
         echo "FTP_USER: $FTP_USER"
         echo "FTP_SERVER: $FTP_SERVER"
         
-        # Check if the target directory exists on the server, create if it doesn't
-        lftp -u $FTP_USER,$FTP_PASSWORD $FTP_SERVER -e "ls /giuaky_cuoiky || mkdir -p /giuaky_cuoiky; quit"
+        # Try to check if the target directory exists on the server and create it if necessary
+        # We assume the user has permissions to create directories in their home directory
+        lftp -u $FTP_USER,$FTP_PASSWORD $FTP_SERVER -e "ls /giuaky_cuoiky || mkdir -p /home/$FTP_USER/giuaky_cuoiky; quit"
 
         # Mirror files to the server (replace existing files)
         lftp -u $FTP_USER,$FTP_PASSWORD $FTP_SERVER <<EOF
-        mirror -R --ignore-time --parallel=5 --delete ./ /giuaky_cuoiky  # Copy and delete outdated files on server
+        mirror -R --ignore-time --parallel=5 --delete ./ /home/$FTP_USER/giuaky_cuoiky  # Use a relative path within the user's home
         quit
         EOF
       env:
