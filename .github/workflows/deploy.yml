@@ -31,12 +31,12 @@ jobs:
         echo "FTP_SERVER: $FTP_SERVER"
         
         # Try to check if the target directory exists on the server and create it if necessary
-        # We assume the user has permissions to create directories in their home directory
-        lftp -u $FTP_USER,$FTP_PASSWORD $FTP_SERVER -e "ls /giuaky_cuoiky || mkdir -p /home/$FTP_USER/giuaky_cuoiky; quit"
+        # Here we use a known writable directory, like `/ftp/` or `/var/www/`
+        lftp -u $FTP_USER,$FTP_PASSWORD $FTP_SERVER -e "ls /giuaky_cuoiky || mkdir -p /var/www/giuaky_cuoiky; quit"
 
         # Mirror files to the server (replace existing files)
         lftp -u $FTP_USER,$FTP_PASSWORD $FTP_SERVER <<EOF
-        mirror -R --ignore-time --parallel=5 --delete ./ /home/$FTP_USER/giuaky_cuoiky  # Use a relative path within the user's home
+        mirror -R --ignore-time --parallel=5 --delete ./ /var/www/giuaky_cuoiky  # Use a known writable directory
         quit
         EOF
       env:
