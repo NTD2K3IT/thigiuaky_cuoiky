@@ -30,6 +30,6 @@ jobs:
         quit
         EOF
       env:
-        FTP_USER: ${{ secrets.FTP_USER }}  # Lấy thông tin người dùng FTP từ Secrets
+        FTP_USER: ${{ secrets.FTP_USERNAME }}  # Lấy thông tin người dùng FTP từ Secrets
         FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}  # Lấy thông tin mật khẩu FTP từ Secrets
         FTP_SERVER: ${{ secrets.FTP_SERVER }}  # Lấy thông tin máy chủ FTP từ Secrets
