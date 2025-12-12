@@ -4,11 +4,8 @@ name: Deploy to Server
 on:
   push:
     branches:
-      - master
-      
-        # Chỉ deploy khi có thay đổi ở nhánh main
+      - master  # Chỉ deploy khi có thay đổi ở nhánh main
 
-# Các bước thực hiện trong quá trình deploy
 jobs:
   deploy:
     runs-on: ubuntu-latest  # Chạy trên môi trường Ubuntu mới nhất
@@ -18,19 +15,21 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2  # Dùng action để checkout mã nguồn
 
-    # Bước 2: Cài đặt FTP client (lftp) trên server để sao chép file
-    - name: Set up FTP client
-      run: sudo apt-get install lftp  # Cài đặt công cụ lftp
-
-    # Bước 3: Kiểm tra xem thư mục local_dir có tồn tại không
+    # Bước 2: Kiểm tra xem thư mục local_dir có tồn tại không
     - name: Check if local directory exists
       run: |
+        pwd  # In ra đường dẫn hiện tại
+        ls -R  # Liệt kê tất cả các thư mục và tệp trong thư mục làm việc
         if [ -d "./local_dir" ]; then
           echo "local_dir exists"
         else
           echo "local_dir does not exist"
           exit 1
         fi
+
+    # Bước 3: Cài đặt FTP client (lftp) trên server để sao chép file
+    - name: Set up FTP client
+      run: sudo apt-get install lftp  # Cài đặt công cụ lftp
 
     # Bước 4: Deploy mã nguồn lên server qua FTP
     - name: Deploy to server via FTP
