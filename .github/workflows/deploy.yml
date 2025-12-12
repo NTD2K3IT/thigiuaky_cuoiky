@@ -15,21 +15,21 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2  # Dùng action để checkout mã nguồn
 
-    # Bước 2: Kiểm tra xem thư mục local_dir có tồn tại không
+    # Bước 2: Cài đặt FTP client (lftp) trên server để sao chép file
+    - name: Set up FTP client
+      run: sudo apt-get install -y lftp  # Cài đặt công cụ lftp
+
+    # Bước 3: Kiểm tra xem thư mục local_dir có tồn tại không (Nếu bạn cần kiểm tra thư mục cụ thể)
     - name: Check if local directory exists
       run: |
         pwd  # In ra đường dẫn hiện tại
         ls -R  # Liệt kê tất cả các thư mục và tệp trong thư mục làm việc
+        # Kiểm tra thư mục local_dir nếu bạn tạo thư mục này trong tương lai
         if [ -d "./local_dir" ]; then
           echo "local_dir exists"
         else
           echo "local_dir does not exist"
-          exit 1
         fi
-
-    # Bước 3: Cài đặt FTP client (lftp) trên server để sao chép file
-    - name: Set up FTP client
-      run: sudo apt-get install lftp  # Cài đặt công cụ lftp
 
     # Bước 4: Deploy mã nguồn lên server qua FTP
     - name: Deploy to server via FTP
@@ -37,7 +37,7 @@ jobs:
         echo "FTP_USER: $FTP_USER"
         echo "FTP_SERVER: $FTP_SERVER"
         lftp -u $FTP_USER,$FTP_PASSWORD $FTP_SERVER <<EOF
-        mirror -R ./local_dir /remote_dir  # Sao chép mã nguồn từ local lên server
+        mirror -R ./ /wwwroot  # Sao chép mã nguồn từ thư mục hiện tại lên server (thư mục đích trên server)
         quit
         EOF
       env:
