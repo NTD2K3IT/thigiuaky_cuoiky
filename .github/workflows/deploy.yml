@@ -1,47 +1,50 @@
 name: Deploy to Server
 
 on:
-  push:
-    branches:
-      - master  # Deploy on push to the 'main' branch
+  push:
+    branches:
+      - master  # Deploy on push to the 'main' branch
 
 jobs:
-  deploy:
-    runs-on: ubuntu-latest  # Run on the latest Ubuntu environment
+  deploy:
+    runs-on: ubuntu-latest  # Run on the latest Ubuntu environment
 
-    steps:
-    # Step 1: Checkout code from the repository
-    - name: Checkout code
-      uses: actions/checkout@v2
+    steps:
+    # Step 1: Checkout code from the repository
+    - name: Checkout code
+      uses: actions/checkout@v2
 
-    # Step 2: Install FTP client (lftp)
-    - name: Set up FTP client
-      run: sudo apt-get install -y lftp
+    # Step 2: Install FTP client (lftp)
+    - name: Set up FTP client
+      run: sudo apt-get install -y lftp
 
-    # Step 3: Check if the local directory exists
-    - name: Check if local directory exists
-      run: |
-        pwd  # Print the current directory
-        ls -R  # List files and directories recursively
+    # Step 3: Check if the local directory exists
+    - name: Check if local directory exists
+      run: |
+        pwd  # Print the current directory
+        ls -R  # List files and directories recursively
 
-    # Step 4: Deploy to server via FTP
-    - name: Deploy to server via FTP
-      run: |
-        echo "FTP_USER: $FTP_USER"
-        echo "FTP_SERVER: $FTP_SERVER"
-        
-        # Check if the target directory exists on the server
-        lftp -u $FTP_USER,$FTP_PASSWORD $FTP_SERVER -e "ls /wwwroot; quit"
-        
-        # If the directory does not exist, create it
-        lftp -u $FTP_USER,$FTP_PASSWORD $FTP_SERVER -e "mkdir -p /wwwroot; quit"
+    # Step 4: Deploy to server via FTP
+    - name: Deploy to server via FTP
+      run: |
+        # Đổi thư mục đích thành /giuaky_cuoiky để phù hợp với cấu trúc hosting Somee
+        TARGET_DIR="/giuaky_cuoiky" 
 
-        # Mirror files to the server
-        lftp -u $FTP_USER,$FTP_PASSWORD $FTP_SERVER <<EOF
-        mirror -R --ignore-time --parallel=5 ./ /wwwroot  # Copy files to the server
-        quit
-        EOF
-      env:
-        FTP_USER: ${{ secrets.FTP_USERNAME }}
-        FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
-        FTP_SERVER: ${{ secrets.FTP_SERVER }}
+        echo "FTP_USER: $FTP_USER"
+        echo "FTP_SERVER: $FTP_SERVER"
+        
+        # Check if the target directory exists on the server
+        lftp -u $FTP_USER,$FTP_PASSWORD $FTP_SERVER -e "ls $TARGET_DIR; quit"
+        
+        # If the directory does not exist, create it
+        lftp -u $FTP_USER,$FTP_PASSWORD $FTP_SERVER -e "mkdir -p $TARGET_DIR; quit"
+
+        # Mirror files to the server
+        lftp -u $FTP_USER,$FTP_PASSWORD $FTP_SERVER <<EOF
+        mirror -R --ignore-time --parallel=5 ./ $TARGET_DIR  # Copy files to the server
+        quit
+        EOF
+      env:
+        FTP_USER: ${{ secrets.FTP_USERNAME }}
+        FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+        FTP_SERVER: ${{ secrets.FTP_SERVER }}
