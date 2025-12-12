@@ -31,14 +31,14 @@ jobs:
         echo "FTP_SERVER: $FTP_SERVER"
         
         # Check if the target directory exists on the server
-        lftp -u $FTP_USER,$FTP_PASSWORD $FTP_SERVER -e "ls /wwwroot; quit"
+        lftp -u $FTP_USER,$FTP_PASSWORD $FTP_SERVER -e "ls /giuaky_cuoiky; quit"
         
         # If the directory does not exist, create it
-        lftp -u $FTP_USER,$FTP_PASSWORD $FTP_SERVER -e "mkdir -p /wwwroot; quit"
+        lftp -u $FTP_USER,$FTP_PASSWORD $FTP_SERVER -e "mkdir -p /giuaky_cuoiky; quit"
 
         # Mirror files to the server
         lftp -u $FTP_USER,$FTP_PASSWORD $FTP_SERVER <<EOF
-        mirror -R --ignore-time --parallel=5 ./ /wwwroot  # Copy files to the server
+        mirror -R --ignore-time --parallel=5 ./ /giuaky_cuoiky  # Copy files to the server
         quit
         EOF
       env:
