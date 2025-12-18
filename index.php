@@ -1,38 +1,3 @@
-<?php
-session_start();
-require_once 'config.php';
-
-$login_error = "";
-
-if (isset($_POST['login'])) {
-    $username = trim($_POST['username']);
-    $password = trim($_POST['password']);
-
-    if (empty($username) || empty($password)) {
-        $login_error = "Vui lòng nhập đầy đủ thông tin";
-    } else {
-        $sql = "SELECT * FROM admin_users WHERE username = ?";
-        $stmt = mysqli_prepare($conn, $sql);
-        mysqli_stmt_bind_param($stmt, "s", $username);
-        mysqli_stmt_execute($stmt);
-        $result = mysqli_stmt_get_result($stmt);
-
-        if ($row = mysqli_fetch_assoc($result)) {
-            if (password_verify($password, $row['password'])) {
-                $_SESSION['admin_login'] = true;
-                $_SESSION['admin_username'] = $row['username'];
-
-                header("Location: list_users.php");
-                exit;
-            } else {
-                $login_error = "Sai mật khẩu";
-            }
-        } else {
-            $login_error = "Tài khoản không tồn tại";
-        }
-    }
-}
-?>
 
 <!DOCTYPE html>
 <html lang="vi">
@@ -46,6 +11,7 @@ if (isset($_POST['login'])) {
 
 <body class="bg-light d-flex flex-column vh-100">
     <!-- Header -->
+     <h1>Nguyen Trong Duong - Chiều thứ 5</h1>
     <header class="py-3 bg-white border-bottom shadow-sm w-100">
         <div class="container d-flex justify-content-between align-items-center">
             <h1 class="m-0 h4">
