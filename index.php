@@ -9,5 +9,7 @@
         <h1>Thi giữa kỳ</h1>
         <p>DH52200550_NGUYENTRONGDUONG</p>
         <img src="./img/avatar.jpg" alt="">
+        <p>Quê Quán : Xã Xuân Lộc, DalLak</p>
+        <img src="./img/avatar.jpg" alt="">
     </body>
     </html
