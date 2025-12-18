@@ -32,11 +32,11 @@ jobs:
         
         # Kiểm tra nếu thư mục mục tiêu tồn tại trên server và tạo nếu cần thiết
         # Dùng đường dẫn thư mục cụ thể của bạn
-        lftp -u $FTP_USER,$FTP_PASSWORD $FTP_SERVER -e "ls /www.NTDIT2K3.somee.com/giuaky_cuoiky || mkdir -p /www.NTDIT2K3.somee.com/giuaky_cuoiky; quit"
+        lftp -u $FTP_USER,$FTP_PASSWORD $FTP_SERVER -e "ls /htdocs/OSS_Cuoiky1 || mkdir -p /htdocs/OSS_Cuoiky1; quit"
 
         # Đồng bộ các tệp tin từ local lên server (thay thế các tệp tin đã tồn tại)
         lftp -u $FTP_USER,$FTP_PASSWORD $FTP_SERVER <<EOF
-        mirror -R --ignore-time --parallel=5 --delete ./ /www.NTDIT2K3.somee.com/giuaky_cuoiky  # Sử dụng đường dẫn thư mục cụ thể
+        mirror -R --ignore-time --parallel=5 --delete ./ /htdocs/OSS_Cuoiky1  # Sử dụng đường dẫn thư mục cụ thể
         quit
         EOF
       env:
