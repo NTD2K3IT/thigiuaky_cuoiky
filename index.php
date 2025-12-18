@@ -10,8 +10,7 @@
 </head>
 
 <body class="bg-light d-flex flex-column vh-100">
-    <!-- Header -->
-     <h1>Nguyen Trong Duong - Chiều thứ 5</h1>
+    <h1>Nguyen Trong Duong - Chieu thu 5</h1>
     <header class="py-3 bg-white border-bottom shadow-sm w-100">
         <div class="container d-flex justify-content-between align-items-center">
             <h1 class="m-0 h4">
